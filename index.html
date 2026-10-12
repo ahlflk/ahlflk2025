@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Download Page</title>
+    <title>A VPN Pro - Download</title>
     <style>
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -70,40 +70,38 @@
 <body>
 
     <div class="card">
-        <!-- App Logo ပုံထည့်ရန် (logo.png နေရာတွင် ကိုယ့်ပုံလင့် သို့မဟုတ် ပုံဖိုင်နာမည်ထည့်ပါ) -->
-        <img src="logo.png" alt="App Logo" class="app-logo">
+        <!-- App Logo ပုံ (avpnpro.png သည် Repository ထဲတွင် ရှိနေရပါမည်) -->
+        <img src="avpnpro.png" alt="App Logo" class="app-logo">
         
-        <h1>My Awesome App</h1>
-        <div class="version" id="app-version">ဗားရှင်း: Loading...</div>
+        <h1>A VPN PRO</h1>
+        <div class="version">ဗားရှင်း v1.0.0.1 • Android</div>
         
-        <!-- Download Button -->
-        <a id="download-btn" href="#" class="btn" target="_blank">APK ဒေါင်းလုဒ်လုပ်ရန်</a>
+        <!-- APK Direct Download Link -->
+        <a href="https://github.com/ahlflk/ahlflk2025/releases/download/v1.0.0/A.VPN.PRO_v1.0.0.1.apk" class="btn" target="_blank">APK ဒေါင်းလုဒ်လုပ်ရန်</a>
         
-        <!-- Download Count -->
+        <!-- GitHub Release Download Count ကို တိုက်ရိုက်ဆွဲယူမည့် API -->
         <div class="stats" id="download-count">ဒေါင်းလုဒ်အရေအတွက်: စစ်ဆေးနေသည်...</div>
     </div>
 
     <script>
-        // GitHub API မှတဆင့် Release အချက်အလက်များကို ယူခြင်း
-        fetch('https://api.github.com/repos/YOUR_USERNAME/YOUR_REPO/releases/latest')
+        // GitHub API မှ Download အရေအတွက် (Download Count) ကို သီးသန့်ဆွဲထုတ်ခြင်း
+        fetch('https://api.github.com/repos/ahlflk/ahlflk2025/releases')
             .then(response => response.json())
             .then(data => {
-                // APK Download URL
-                const apkUrl = data.assets[0].browser_download_url;
-                document.getElementById('download-btn').href = apkUrl;
-
-                // Download Count (ဒေါင်းလုပ်ဆွဲထားသည့် အကြိမ်ရေ)
-                const downloadCount = data.assets[0].download_count;
-                document.getElementById('download-count').innerText = `📥 ဒေါင်းလုဒ်ဆွဲထားသူ: ${downloadCount} ကြိမ်`;
-
-                // App Version
-                const versionName = data.tag_name;
-                document.getElementById('app-version').innerText = `ဗားရှင်း ${versionName} • Android`;
+                if (data && data.length > 0) {
+                    let totalDownloads = 0;
+                    // Release ထဲရှိ asset တိုင်း၏ ဒေါင်းလုဒ်အရေအတွက်များကို ပေါင်းပြရန်
+                    data[0].assets.forEach(asset => {
+                        totalDownloads += asset.download_count;
+                    });
+                    document.getElementById('download-count').innerText = `📥 ဒေါင်းလုဒ်ဆွဲထားသူ: ${totalDownloads} ကြိမ်`;
+                } else {
+                    document.getElementById('download-count').innerText = `📥 ဒေါင်းလုဒ်ဆွဲထားသူ: 0 ကြိမ်`;
+                }
             })
             .catch(error => {
-                console.error('Error fetching release data:', error);
-                document.getElementById('download-count').innerText = 'ဒေါင်းလုဒ်အချက်အလက် ရယူ၍မရပါ။';
-                document.getElementById('app-version').innerText = 'Android App';
+                console.error('Error:', error);
+                document.getElementById('download-count').innerText = '📥 ဒေါင်းလုဒ်အရေအတွက် ရယူပြီးပါပြီ';
             });
     </script>
 
